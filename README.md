@@ -48,7 +48,7 @@ Likewise you could do the same for the server:
 ```
 cd $GOPATH/src/github.com/schollz/wormhole
 go build -ldflags "-s -w -X main.fileName=testfile" -o server.exe
-``
+```
 
 # License
 
