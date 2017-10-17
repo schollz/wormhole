@@ -1,34 +1,55 @@
-# Build your own wormhole
+# wormhole
+
+*File transfer over parallel TCP*
 
 This program pays homage to [magic-wormhole](https://github.com/warner/magic-wormhole) except it doesn't have the rendevous server, or the transit relay, or the password-authenticated key exchange. Its not really anything like it, except that its file transfer over TCP. Here you can transfer a file using multiple TCP ports simultaneously. 
 
-The binary has no flags even though a single binary has the client and server built-in. This is intentional. The flags are set at buildtime, so that each pair of server/client programs are used for only one type of file and can be deleted after the file is transfered. The binary knows whether it is a server or client depending on the flags set at buildtime. This is simpler for folks who don't know how to do anything except double-click on a program. Here, the computer-wizard will build both binaries and run the server on their computer. Then they send the client binary to the computerphobe who just double clicks on it and it will magically transfer the file straight to their computer, fast.
+## Normal use
 
-## Server computer
+### Server computer 
 
-For transfering `testfile` to others:
+Be sure to open up TCP ports 27001-27009 on your port forwarding. Also, get your public address:
+
+```
+$ curl icanhazip.com
+X.Y.W.Z
+```
+
+Then get and run *wormhole*:
+
+```
+$ go get github.com/schollz/wormhole
+$ wormhole -file SOMEFILE
+```
+
+*wormhole* automatically knows to run as a server when the `-file` flag is set.
+
+### Client computer
+
+```
+$ go get github.com/schollz/wormhole
+$ wormhole -server X.Y.W.Z
+```
+
+*wormhole* automatically knows to run as a client when the `-server` flag is set.
+
+
+## Building for use without flags
+
+For people that don't have or don't want to build from source and don't want to use the command line, you can build it for them to have the flags set automatically! Build the wormhole binary so that it always behaves as a client to a specified server, so that someone just needs to click on it.
 
 ```
 cd $GOPATH/src/github.com/schollz/wormhole
-go build -ldflags "-s -w -X main.fileName=testfile" -o server.exe && ./server.exe
+go build -ldflags "-s -w -X main.serverAddress=X.Y.W.Z" -o client.exe
 ```
 
-Also make sure to open up TCP ports `27001-27009` in your port forwarding.
-
-Then run:
-
-```
-./server.exe
-```
-
-
-## Client computer
-
-Change `localhost` to the public address of the server computer:
+Likewise you could do the same for the server:
 
 ```
 cd $GOPATH/src/github.com/schollz/wormhole
-go build -ldflags "-s -w -X main.serverAddress=localhost" -o client.exe
-```
+go build -ldflags "-s -w -X main.fileName=testfile" -o server.exe
+``
 
-Then send the `client.exe` to whoever is going to recieve the file and have them double-click it.
+# License
+
+MIT
