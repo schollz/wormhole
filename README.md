@@ -1,6 +1,6 @@
 # wormhole
 
-*File transfer over parallel TCP*
+*File transfer over parallel TCP, requires port-forwarding your TCP ports.*
 
 This program pays homage to [magic-wormhole](https://github.com/warner/magic-wormhole) except it doesn't have the rendevous server, or the transit relay, or the password-authenticated key exchange. Its not really anything like it, except that its file transfer over TCP. Here you can transfer a file using multiple TCP ports simultaneously. 
 
